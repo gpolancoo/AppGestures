@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.gesture.GestureOverlayView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gestures_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gestureStrokeType="single"
+    android:eventsInterceptionEnabled="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/rect_reproductor"
+            android:layout_width="260dp"
+            android:layout_height="180dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/white"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="false"
+            android:focusable="false">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REPRODUCTOR VÍDEO"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="➡ Desliza a la dreta: Vídeo "
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rect_piano"
+            android:layout_width="260dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="false"
+            android:focusable="false">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PIANO"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="➡ Desliza a la esquerra: Piano "
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.gesture.GestureOverlayView>
