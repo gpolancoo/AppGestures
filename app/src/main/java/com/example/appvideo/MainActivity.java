@@ -7,10 +7,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Al iniciar, carreguem el menú principal.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Al iniciar, cargamos el menú de los rectángulos
+        // Si no hi ha cap fragment carregat, carreguem el MenuFragment per defecte
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new MenuFragment())
@@ -19,9 +20,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragment(androidx.fragment.app.Fragment fragment) {
+        // Si volem canviar de fragment des del MenuFragment, cridem aquesta funció per fer el canvi
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null) // Permite volver atrás al menú
+                .addToBackStack(null) // Permet tornar al menú amb el botó de "back"
                 .commit();
     }
 }
