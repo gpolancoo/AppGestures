@@ -18,9 +18,9 @@
         <LinearLayout
             android:id="@+id/rect_reproductor"
             android:layout_width="260dp"
-            android:layout_height="180dp"
-            android:layout_marginBottom="20dp"
-            android:background="@color/white"
+            android:layout_height="150dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/white"
             android:elevation="10dp"
             android:gravity="center"
             android:orientation="vertical"
@@ -31,23 +31,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="REPRODUCTOR VÍDEO"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="➡ Desliza a la dreta: Vídeo "
+                android:layout_marginTop="10dp"
+                android:text="➡ Deslliçar  a la dreta: Vídeo"
                 android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/rect_piano"
             android:layout_width="260dp"
-            android:layout_height="180dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/white"
             android:elevation="10dp"
             android:gravity="center"
             android:orientation="vertical"
@@ -58,15 +59,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PIANO"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="22sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="➡ Desliza a la esquerra: Piano "
+                android:layout_marginTop="10dp"
+                android:text="➡ Deslliçar  a la esquerra: Piano"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Sortir"
+            android:layout_width="260dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/white"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="false"
+            android:focusable="false">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SORTIR"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="➡ Fer una V: Sortir"
                 android:textSize="16sp" />
         </LinearLayout>
 

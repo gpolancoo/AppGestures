@@ -1,6 +1,10 @@
 package com.example.appvideo;
 
-
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,24 +13,42 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import android.widget.VideoView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 
-public class VideoFragment extends Fragment {
+// Implementem la interfície OnGesturePerformedListener per detectar dibuixos
+public class VideoFragment extends Fragment implements GestureOverlayView.OnGesturePerformedListener {
     private VideoView videoView; // El VideoView encapsula el MediaPlayer i el SurfaceView
     private ImageButton btnPlay, btnPause, btnReset;
     // Variables per controlar l'estat del vídeo quan girem la pantalla o sortim de l'app
     private int videoActual = 0;// Guarda el mil·lisegon actual
     private boolean Reproduint = false;// Indica si el vídeo estava en reproduinse
+    private GestureLibrary llibreria; // Aquesta variable guarda la "biblioteca" on estan guardats els gestos
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //Inicia el layout
         View view = inflater.inflate(R.layout.video_fragment, container, false);
+
+        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw)
+        llibreria = GestureLibraries.fromRawResource(getContext(), R.raw.gestures);
+
+        // Si el fitxer no es carrega bé, tanquem l'activitat per evitar errors
+        if (!llibreria.load()) {
+            getActivity().finish();
+        }
+
+        // Busquem la "capa invisible" del XML on l'usuari dibuixa el gest
+        GestureOverlayView gesturesView = view.findViewById(R.id.gestures_overlay);
+        // Indiquem que aquest Fragment escoltara quan l'usuari acabi de fer el dibuix
+        if (gesturesView != null) {
+            gesturesView.addOnGesturePerformedListener(this);
+        }
 
         // Enllaçem els objectes amb XML
         videoView = view.findViewById(R.id.video);
@@ -80,6 +102,38 @@ public class VideoFragment extends Fragment {
             actualizarBotons(true);
         });
         return view;
+    }
+
+    // Mètode per gestionar els gestos realitzats sobre el VideoView
+    @Override
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        // Comparem el dibuix que ha fet l'usuari amb els que tenim a la biblioteca
+        ArrayList<Prediction> gestures = llibreria.recognize(gesture);
+
+        // Si el sistema ha trobat alguna semblant
+        if (gestures.size() > 0) {
+            Prediction millorSemblant = gestures.get(0);
+
+            // El "score" indica quant s'assembla i el 1.0 es que es sembla molt
+            if (millorSemblant.score > 1.0) {
+                String nombreGesto = millorSemblant.name;
+
+                // Segons el nom del gest, fem una acció o una altra
+                if (nombreGesto.equals("Menu")) {
+                    Toast.makeText(getContext(), "Tornant al Menú...", Toast.LENGTH_SHORT).show();
+                    // Cridem la funcio de la MainActivity per canviar el Fragment
+                    ((MainActivity) getActivity()).replaceFragment(new MenuFragment());
+
+                } else if (nombreGesto.equals("Salir")) {
+                    Toast.makeText(getContext(), "Tancant aplicació", Toast.LENGTH_SHORT).show();
+                    // Tanquem l'app completament
+                    getActivity().finish();
+                }
+            } else {
+                // Si el dibuix és molt diferent, avisem l'usuari
+                Toast.makeText(getContext(), "Gest no reconegut", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     // Aquest mètode és vital: s'executa si ens truquen o minimitzem l'app

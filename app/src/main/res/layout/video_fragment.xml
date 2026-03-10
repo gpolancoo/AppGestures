@@ -1,49 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.gesture.GestureOverlayView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gestures_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:gestureStrokeType="single"
+    android:eventsInterceptionEnabled="false"
+    android:orientation="vertical">
 
-    <VideoView
-        android:id="@+id/video"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_height="match_parent"
+        android:background="#000000">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        android:background="#40FFFFFF"
-        android:padding="8dp"
-        android:orientation="horizontal">
+        <VideoView
+            android:id="@+id/video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-        <ImageButton
-            android:id="@+id/Play"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/play"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/Pause"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/pause"
-            android:visibility="gone"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#40FFFFFF"
+                android:padding="8dp"
+                android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/Reset"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/replay"
-            android:layout_marginStart="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"/>
-    </LinearLayout>
-</RelativeLayout>
+                <ImageButton
+                    android:id="@+id/Play"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/play"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter" />
+
+                <ImageButton
+                    android:id="@+id/Pause"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/pause"
+                    android:visibility="gone"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter"/>
+
+                <ImageButton
+                    android:id="@+id/Reset"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/replay"
+                    android:layout_marginStart="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="➡ Fer una V: Sortir"
+                android:textColor="@color/white"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="➡ Fer un remolino: Menu"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.gesture.GestureOverlayView>
