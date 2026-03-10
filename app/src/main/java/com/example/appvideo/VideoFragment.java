@@ -58,7 +58,7 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
 
         // Si tenim un estat guardat (per exemple, després de girar la pantalla), recuperem les dades
         if (savedInstanceState != null) {
-            videoActual = savedInstanceState.getInt("posicio");// Recuperem el segon actual
+            videoActual = savedInstanceState.getInt("posicion");// Recuperem el segon actual
             Reproduint = savedInstanceState.getBoolean("reproduint"); // Sabem si s'estava reproduint
         }
         // Creem la URI per accedir al vídeo local en res/raw
@@ -79,26 +79,28 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
             mp.setOnCompletionListener(mediaPlayer -> {
                 actualizarBotons(false);// Mostrem botó de Play
                 videoActual = 0; // Reiniciem  el comptador on es guarda el temps deel video
+                Reproduint = false;
             });
         });
         //indiquem que aquest boto es per iniciar el video
         btnPlay.setOnClickListener(v -> {
             videoView.start();
+            Reproduint = true;
             actualizarBotons(true);
         });
 
         //indiquem que aquest boto es per pausar el video
         btnPause.setOnClickListener(v -> {
             videoView.pause();
+            Reproduint = false;
             actualizarBotons(false);
         });
 
         //indiquem que aquest boto es per reiniciar el video i torna a carregar el vídeo des de l'inici
         btnReset.setOnClickListener(v -> {
-            videoView.stopPlayback(); // Aturem completament el MediaPlayer
-            String path = "android.resource://" + requireContext().getPackageName() + "/" + R.raw.super_mario_galaxy;
-            videoView.setVideoPath(path); // Tornem a assignar la ruta
-            videoView.start(); // Comença des de zero
+            videoView.seekTo(0);
+            videoView.start();
+            Reproduint = true;
             actualizarBotons(true);
         });
         return view;
@@ -141,13 +143,10 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
         super.onPause();
         if (videoView != null) {
             // Guardem l'estat actual abans que el fragment quedi en segon pla
-            Reproduint = videoView.isPlaying();
             videoActual = videoView.getCurrentPosition();
-
-            if (videoView.isPlaying()) {
-                videoView.pause(); // Aturem el vídeo
-                actualizarBotons(false);
-            }
+            Reproduint = videoView.isPlaying();
+            videoView.pause();
+            actualizarBotons(false);
         }
     }
     // Es crida just abans de destruir el fragment per guardar l'estat (com al girar la pantalla)
@@ -156,7 +155,7 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
         if (videoView != null) {
             // Guardem les claus per recuperar-les al onCreateView
             outState.putInt("posicion", videoView.getCurrentPosition());
-            outState.putBoolean("reproduciendo", videoView.isPlaying());
+            outState.putBoolean("reproducint", videoView.isPlaying());
         }
     }
 
