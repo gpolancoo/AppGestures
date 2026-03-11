@@ -28,7 +28,7 @@ public class PianoFragment extends Fragment implements GestureOverlayView.OnGest
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.piano_fragment, container, false);
 
-        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw)
+        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw
         llibreria = GestureLibraries.fromRawResource(getContext(), R.raw.gestures);
 
         // Si el fitxer no es carrega bé, tanquem l'activitat per evitar errors
@@ -36,7 +36,7 @@ public class PianoFragment extends Fragment implements GestureOverlayView.OnGest
             getActivity().finish();
         }
 
-        // Busquem la "capa invisible" del XML on l'usuari dibuixa el gest
+        // Busquem la "capa" que hem ficat al  XML on l'usuari dibuixa el gest
         GestureOverlayView gesturesView = view.findViewById(R.id.gestures_overlay);
         // Indiquem que aquest Fragment escoltara quan l'usuari acabi de fer el dibuix
         gesturesView.addOnGesturePerformedListener(this);
@@ -74,27 +74,35 @@ public class PianoFragment extends Fragment implements GestureOverlayView.OnGest
 
         return view;
     }
+    // Funcio que s'activa quan l'usuari aixeca el dit de la pantalla
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+
         ArrayList<Prediction> gestures = llibreria.recognize(gesture);
 
+        // Si el sistema ha trobat alguna semblant
         if (gestures.size() > 0) {
+            //Agafem la que atrobat
             Prediction millorSemblant = gestures.get(0);
 
+            //Score es la semblança de la gestura si es 1.0 es que es molt semblant si es menos no tant
             if (millorSemblant.score > 1.0) {
+                // Mirem el nom que li vam posar al gest a  Gesture Builder
                 String nombreGesto = millorSemblant.name;
 
+
                if (nombreGesto.equals("Menu")) {
-                    // Cambia "Menu" por el nombre exacto que pusiste en Gesture Builder
                     Toast.makeText(getContext(), "Tornant al Menú...", Toast.LENGTH_SHORT).show();
+                   // Cridem la funcio de la MainActivity per canviar el Fragment
                     ((MainActivity) getActivity()).replaceFragment(new MenuFragment());
 
                 } else if (nombreGesto.equals("Salir")) {
                     Toast.makeText(getContext(), "Tancant aplicació", Toast.LENGTH_SHORT).show();
+                   // Tanquem l'app completament
                     getActivity().finish();
                 }
             } else {
-                Toast.makeText(getContext(), "Gest no reconegut", Toast.LENGTH_SHORT).show();
-            }
+                // Si el dibuix és molt diferent i no arriba a 1.0 de score, avisem l'usuari
+                Toast.makeText(getContext(), "Gestura no reconeixida, intentau de nou", Toast.LENGTH_SHORT).show();            }
         }
     }
 

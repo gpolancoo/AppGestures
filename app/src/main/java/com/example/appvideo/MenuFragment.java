@@ -21,7 +21,7 @@ public class MenuFragment extends Fragment implements GestureOverlayView.OnGestu
         // Carrega el layout del menú (on hi ha el GestureOverlayView)
         View view = inflater.inflate(R.layout.menu_fragment, container, false);
 
-        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw)
+        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw
         llibreria = GestureLibraries.fromRawResource(getContext(), R.raw.gestures);
 
         // Si el fitxer no es carrega bé, tanquem l'activitat per evitar errors
@@ -29,7 +29,7 @@ public class MenuFragment extends Fragment implements GestureOverlayView.OnGestu
             getActivity().finish();
         }
 
-        // Busquem la "capa invisible" del XML on l'usuari dibuixa el gest
+        // Busquem la "capa" que hem ficat al  XML on l'usuari dibuixa el gest
         GestureOverlayView gesturesView = view.findViewById(R.id.gestures_overlay);
         // Indiquem que aquest Fragment escoltara quan l'usuari acabi de fer el dibuix
         gesturesView.addOnGesturePerformedListener(this);
@@ -39,22 +39,20 @@ public class MenuFragment extends Fragment implements GestureOverlayView.OnGestu
 
     // Funcio que s'activa quan l'usuari aixeca el dit de la pantalla
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-        // Comparem el dibuix que ha fet l'usuari amb els que tenim a la biblioteca
-        // El sistema ens dona una llista de possibles coincidències
+        //Fem una llista de totes les possibles coincidencies de el nostre gest
         ArrayList<Prediction> gestures = llibreria.recognize(gesture);
 
         // Si el sistema ha trobat alguna semblant
         if (gestures.size() > 0) {
-            // Agafem la millor gestura que es sembla al dibuix que a fet el usuari
+           //Agafem la que atrobat
             Prediction millorSemblant = gestures.get(0);
 
-            // El "score" indica quant s'assembla i el 1.0 es que es sembla molt
-            if (millorSemblant.score > 1.0) {
+           //Score es la semblança de la gestura si es 1.0 es que es molt semblant si es menos no tant
+            if (millorSemblant.score >= 1.0) {
 
                 // Mirem el nom que li vam posar al gest a  Gesture Builder
                 String nombreGesto = millorSemblant.name;
 
-                // Segons el nom del gest, fem una acció o una altra
                 if (nombreGesto.equals("reproductorVideo")) {
                     Toast.makeText(getContext(), "Obrint Reproductor...", Toast.LENGTH_SHORT).show();
                     // Cridem la funcio de la MainActivity per canviar el Fragment

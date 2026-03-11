@@ -25,17 +25,16 @@ import java.util.ArrayList;
 // Implementem la interfície OnGesturePerformedListener per detectar dibuixos
 public class VideoFragment extends Fragment implements GestureOverlayView.OnGesturePerformedListener {
     private VideoView videoView; // El VideoView encapsula el MediaPlayer i el SurfaceView
-    private ImageButton btnPlay, btnPause, btnReset;
-    // Variables per controlar l'estat del vídeo quan girem la pantalla o sortim de l'app
+    private ImageButton btnPlay, btnPause, btnReset;//Botons per utilitzar el video
     private int videoActual = 0;// Guarda el mil·lisegon actual
     private boolean Reproduint = false;// Indica si el vídeo estava en reproduinse
     private GestureLibrary llibreria; // Aquesta variable guarda la "biblioteca" on estan guardats els gestos
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //Inicia el layout
+        //Inicia el layout de video
         View view = inflater.inflate(R.layout.video_fragment, container, false);
 
-        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw)
+        // Carreguem el fitxer de gestos que hem creat amb l'app Gesture Builder /raw
         llibreria = GestureLibraries.fromRawResource(getContext(), R.raw.gestures);
 
         // Si el fitxer no es carrega bé, tanquem l'activitat per evitar errors
@@ -43,7 +42,7 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
             getActivity().finish();
         }
 
-        // Busquem la "capa invisible" del XML on l'usuari dibuixa el gest
+        // Busquem la "capa" que hem ficat al  XML on l'usuari dibuixa el gest
         GestureOverlayView gesturesView = view.findViewById(R.id.gestures_overlay);
         // Indiquem que aquest Fragment escoltara quan l'usuari acabi de fer el dibuix
         if (gesturesView != null) {
@@ -65,17 +64,21 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
         Uri videoUri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.super_mario_galaxy);
         videoView.setVideoURI(videoUri);
 
+        //Cuan el video ja esta llest per reproduirse
         videoView.setOnPreparedListener(mp -> {
+            //Si tenim un temps guardat tornem alli
             if (videoActual > 0) {
                 videoView.seekTo(videoActual);
             }
+            //Comprovem si el video s'esta reproduint
             if (Reproduint) {
+
                 videoView.start();
                 actualizarBotons(true);
             } else {
                 actualizarBotons(false);
             }
-            // Gestionem què passa quan el vídeo s'acaba
+            // Gestionem que passa quan el vídeo s'acaba
             mp.setOnCompletionListener(mediaPlayer -> {
                 actualizarBotons(false);// Mostrem botó de Play
                 videoActual = 0; // Reiniciem  el comptador on es guarda el temps deel video
@@ -106,18 +109,20 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
         return view;
     }
 
-    // Mètode per gestionar els gestos realitzats sobre el VideoView
+    // Funcio que s'activa quan l'usuari aixeca el dit de la pantalla
     @Override
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-        // Comparem el dibuix que ha fet l'usuari amb els que tenim a la biblioteca
+        //Fem una llista de totes les possibles coincidencies de el nostre gest
         ArrayList<Prediction> gestures = llibreria.recognize(gesture);
 
         // Si el sistema ha trobat alguna semblant
         if (gestures.size() > 0) {
+            //Agafem la que atrobat
             Prediction millorSemblant = gestures.get(0);
 
-            // El "score" indica quant s'assembla i el 1.0 es que es sembla molt
+            //Score es la semblança de la gestura si es 1.0 es que es molt semblant si es menos no tant
             if (millorSemblant.score > 1.0) {
+                // Mirem el nom que li vam posar al gest a  Gesture Builder
                 String nombreGesto = millorSemblant.name;
 
                 // Segons el nom del gest, fem una acció o una altra
@@ -132,13 +137,13 @@ public class VideoFragment extends Fragment implements GestureOverlayView.OnGest
                     getActivity().finish();
                 }
             } else {
-                // Si el dibuix és molt diferent, avisem l'usuari
-                Toast.makeText(getContext(), "Gest no reconegut", Toast.LENGTH_SHORT).show();
+                // Si el dibuix és molt diferent i no arriba a 1.0 de score, avisem l'usuari
+                Toast.makeText(getContext(), "Gestura no reconeixida, intentau de nou", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // Aquest mètode és vital: s'executa si ens truquen o minimitzem l'app
+    // Aquest mètode  s'executa si ens truquen o minimitzem l'app
     public void onPause() {
         super.onPause();
         if (videoView != null) {
